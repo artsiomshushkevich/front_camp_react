@@ -1,10 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './components/app';
+import React from 'react'
+import {render} from 'react-dom'
+import {createStore, applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
+import reducer from './reducers'
+import Root from './containers/root'
 
-const AppElement = <App/>;
+const middleware = [thunk];
 
-ReactDOM.render(
-  AppElement,
-  document.getElementById('app')
+const store = createStore(
+  reducer,
+  applyMiddleware(...middleware)
 );
+
+render(
+    <Root store={store}/>,
+    document.getElementById('app')
+)
