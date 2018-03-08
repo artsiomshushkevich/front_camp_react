@@ -1,8 +1,7 @@
 import React from 'react';
 import {LocalForm, Control} from 'react-redux-form';
 
-
-export default class LoginForm extends React.Component {
+export default class AuthForm extends React.Component {
     constructor(props) {
         super(props);
     }

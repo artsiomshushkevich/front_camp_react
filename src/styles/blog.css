@@ -1,0 +1,14 @@
+.blog-container {
+    border: 1px solid balck;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    padding-top: 20px;
+    position: relative;
+}
+
+.options-container {
+    position: absolute;
+    right: 8px;
+    top: 4px;
+    width: 60px;
+}

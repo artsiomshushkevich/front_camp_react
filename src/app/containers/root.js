@@ -1,46 +1,53 @@
 import React from 'react';
 import {Provider, connect} from 'react-redux'
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import LoginForm from '../components/login-form';
-import {logIn} from '../actions/index';
+import AuthForm from '../components/auth-form';
+import {logIn, register} from '../actions/index';
+import mainStyles from '../../styles/main.css';
+import Redirect from 'react-router-dom/Redirect';
 
 class Root extends React.Component {
     constructor(props) {
         super(props);
         this.onLoginFormSubmit = this.onLoginFormSubmit.bind(this);
+        this.onRegisterFormSubmit = this.onRegisterFormSubmit.bind(this);
     }
 
-    onLoginFormSubmit(values){
+    onLoginFormSubmit(values) {
         const {username, password} = values;
         this.props.dispatch(logIn(username, password));
     }
 
+    onRegisterFormSubmit(values) {
+        const {username, password} = values;
+        this.props.dispatch(register(username, password));
+    }
+
     render() {
         const {store} = this.props;
+        const {isAuthenticated} = store;
 
         return ( 
             <Provider store={store}>
                 <Router>
                     <div>
                         <ul>
-                            {/* <li>
-                                <Link to="/">Home</Link>
-                            </li> */}
                             <li>
                                 <Link to="/login">Login</Link>
                             </li>
-                            {/* <li>
+                            <li>
                                 <Link to="/register">Register</Link>
-                            </li> */}
+                            </li>
                         </ul>
 
                         <hr/>
 
-                        {/* <Route exact path="/" component={ArticleList} /> */}
-                        <Route path="/login" component={() => (<LoginForm onSubmit={this.onLoginFormSubmit} />)}/>
-                        {/* <Route path="/register" component={RegisterForm}/> */}
-                        {/* <Route path="/addArticle" component={AddArticleForm}/>
-                        <Route path="/updateArticle" component={UpdateArticleForm}/> */}
+                        <Route path="/login" component={() => (<AuthForm onSubmit={this.onLoginFormSubmit} />)}/>
+                        <Route path="/register" component={() => (<AuthForm onSubmit={this.onRegisterFormSubmit} />)}/>
+                        {
+                            isAuthenticated &&
+                            <Redirect to="/"/>
+                        }
                     </div>
                 </Router>
             </Provider>

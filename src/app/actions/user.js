@@ -1,9 +1,9 @@
 export const REGISTER = 'REGISTER';
 export const LOGIN = 'LOGIN';
-export const RECEIVE_JWT = 'RECEIVE_JWT';
+export const JWT_RECEIVED = 'JWT_RECEIVED';
 
-export const receiveJWT = (jwtObj) => ({
-    type: RECEIVE_JWT,
+export const JWTReceived = (jwtObj) => ({
+    type: JWT_RECEIVED,
     jwtObj
 });
 
@@ -23,13 +23,15 @@ const _createAuthRequestConfig = (username, password) => {
     };
 }
 
+const _userRequestBaseURL = 'http://localhost:3000/users';
+
 export const register = (username, password) => {
     return (dispatch) => {
         const config = _createAuthRequestConfig(username, password);
 
-        return fetch('http://localhost:3000/users/', config)
+        return fetch(_userRequestBaseURL, config)
             .then(response => response.json())
-            .then(jwtObj => dispatch(receiveJWT(jwtObj)));
+            .then(jwtObj => dispatch(JWTReceived(jwtObj)));
     };
 };
 
@@ -37,7 +39,7 @@ export const logIn = (username, password) => {
     return (dispatch) => {
         const config = _createAuthRequestConfig(username, password);
 
-        return fetch('http://localhost:3000/users/login', config)
+        return fetch(_userRequestBaseUrl + '/login', config)
             .then(response => response.json())
             .then(jwtObj => dispatch(receiveJWT(jwtObj)));
     };
