@@ -10,12 +10,12 @@ export default class Blog extends React.Component {
         const {blog, onDelete, onUpdate} = this.props;
 
         return (
-            <div class="blog-container">
+            <div className="blog-container">
                 <h1>{blog.title}</h1>
                 <div>
                     <span>{blog.article}</span>
                 </div>
-                <div class="options-container">
+                <div className="options-container">
                     <button onClick={onUpdate}>Update</button>
                     <button onClick={onDelete}>Delete</button>
                 </div>        

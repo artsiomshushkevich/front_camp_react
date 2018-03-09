@@ -3,22 +3,28 @@ export const GET_ONE = 'GET_ONE';
 export const DELETE_ONE = 'DELETE_ONE';
 export const UPDATE_ONE = 'UPDATE_ONE';
 export const ADD_ONE = 'ADD_ONE';
-export const BLOGS_RECEIVED = 'BLOGS_RECEIVED';    
+export const BLOGS_RECEIVED = 'BLOGS_RECEIVED';
+
+const _blogsRequestBaseURL = 'http://localhost:3000/blogs';
 
 export const blogsReceived = (blogs) => ({
     type: BLOGS_RECEIVED,
     blogs
 });
 
-const _blogsRequestBaseURL = 'http://localhost:3000/blogs';
 const _createBlogsReqeustConfig = (method, jwtToken,  payload) => {
-    return {
+    const config = {
         method,
         headers: {
-            'Authorization': jwtToken
-        },
-        body: JSON.stringify(payload)
+            Authorization: jwtToken
+        }
     };
+
+    if (payload) {
+        config.body = JSON.stringify(payload)
+    }
+
+    return config
 };
 
 export const getAll = (jwtToken) => {

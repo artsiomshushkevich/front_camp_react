@@ -1,31 +1,32 @@
 import React from 'react';
 import {Provider, connect} from 'react-redux'
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import AuthForm from '../components/auth-form';
-import {logIn, register} from '../actions/index';
+import Auth from './auth';
+import {logIn, register} from '../actions/user';
+import Blogs from './blogs';
+
 import mainStyles from '../../styles/main.css';
-import Redirect from 'react-router-dom/Redirect';
 
 class Root extends React.Component {
     constructor(props) {
         super(props);
-        this.onLoginFormSubmit = this.onLoginFormSubmit.bind(this);
-        this.onRegisterFormSubmit = this.onRegisterFormSubmit.bind(this);
+        // this.onLoginFormSubmit = this.onLoginFormSubmit.bind(this);
+        // this.onRegisterFormSubmit = this.onRegisterFormSubmit.bind(this);
     }
 
-    onLoginFormSubmit(values) {
-        const {username, password} = values;
-        this.props.dispatch(logIn(username, password));
-    }
+    // onLoginFormSubmit(values) {
+    //     const {username, password} = values;
+    //     this.props.dispatch(logIn(username, password));
+    // }
 
-    onRegisterFormSubmit(values) {
-        const {username, password} = values;
-        this.props.dispatch(register(username, password));
-    }
+    // onRegisterFormSubmit(values) {
+    //     const {username, password} = values;
+    //     this.props.dispatch(register(username, password));
+    // }
 
     render() {
         const {store} = this.props;
-        const {isAuthenticated} = store;
+        const {isAuthorized} = store;
 
         return ( 
             <Provider store={store}>
@@ -35,19 +36,17 @@ class Root extends React.Component {
                             <li>
                                 <Link to="/login">Login</Link>
                             </li>
-                            <li>
+                            {/* <li>
                                 <Link to="/register">Register</Link>
-                            </li>
+                            </li> */}
                         </ul>
 
                         <hr/>
 
-                        <Route path="/login" component={() => (<AuthForm onSubmit={this.onLoginFormSubmit} />)}/>
-                        <Route path="/register" component={() => (<AuthForm onSubmit={this.onRegisterFormSubmit} />)}/>
-                        {
-                            isAuthenticated &&
-                            <Redirect to="/"/>
-                        }
+                        <Route exact path="/" component={Blogs}/>
+                        <Route path="/login" component={Auth}/>
+                        {/* <Route path="/register" component={() => (<AuthForm onSubmit={this.onRegisterFormSubmit} />)}/> */}
+                        
                     </div>
                 </Router>
             </Provider>
@@ -56,8 +55,7 @@ class Root extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    jwtObj: state.jwtObj,
-    isAuthenticated: state.isAuthenticated
+    isAuthorized: state.isAuthorized
 });
 
 export default connect(mapStateToProps)(Root);

@@ -1,0 +1,13 @@
+.alert-message-container {
+    border: 1px solid #e74c3c;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    padding: 8px;
+    position: relative;
+}
+
+.alert-message-container i {
+    position: absolute;
+    right: 7px;
+    top: 7px;
+}

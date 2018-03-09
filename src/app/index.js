@@ -15,4 +15,4 @@ const store = createStore(
 render(
     <Root store={store}/>,
     document.getElementById('app')
-)
+);

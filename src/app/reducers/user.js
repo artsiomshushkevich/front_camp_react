@@ -1,8 +1,9 @@
-import {JWT_RECEIVED} from '../actions/index';
+import {JWT_RECEIVED} from '../actions/user';
 
 const user = (state = {
-    jwtObj: null,
-    isAuthenticated: false
+    username: '',
+    authToken: '',
+    isAuthorized: false
 }, action) => {
 
     switch(action.type) {
@@ -10,8 +11,9 @@ const user = (state = {
             console.dir(action.jwtObj);
 
             return {
-                jwtObj: action.jwtObj,
-                isAuthenticated: true
+                username: action.jwtObj.username,
+                authToken: action.jwtObj.authToken,
+                isAuthorized: true
             };
         default:
             return state;
