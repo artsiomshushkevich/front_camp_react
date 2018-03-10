@@ -13,9 +13,13 @@ export default class AuthForm extends React.Component {
             <LocalForm
                 onSubmit={(values) => onSubmit(values)}
             >
-                <Control.text model=".username"/>
-                <Control.password model=".password" />
-                <input type="submit"/>
+                <label htmlFor="username">Username:</label>
+                <Control.text id="username" model=".username"/>
+
+                <label htmlFor="password">Password:</label>
+                <Control.password id="password" model=".password"/>
+
+                <button type="submit">Submit</button>
             </LocalForm>
         );
 
