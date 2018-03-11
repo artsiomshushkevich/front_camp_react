@@ -1,14 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import AlertMessage from '../components/alert-message';
+import {Link, Redirect} from 'react-router-dom';
 import BlogList from '../components/blog-list';
 import {
     getAll, 
     deleteOne, 
     updateOne, 
     addOne, 
-    clearSuccessfulEditOperationFlag
+    resetShouldRedirectAfterComplition,
+    shouldUpdateBlog
 } from '../actions/blogs';
 
 
@@ -17,41 +17,36 @@ class AllBlogs extends React.Component {
         super(props);
 
         this.onDelete = this.onDelete.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
     }
 
     componentDidMount() {
-        const {dispatch, isAuthorized, authToken} = this.props;
-
-        if (isAuthorized) {
-            dispatch(getAll(authToken));
-        }
+        this.props.dispatch(resetShouldRedirectAfterComplition());
     }
-
+    
     render() {
-        const {isAuthorized, blogs} = this.props;
+        const {isAuthorized, blogs, blogWhichShouldBeUpdated} = this.props;
 
         return (
             <div className="blogs-container">
                 {
                     !isAuthorized &&
-                    <AlertMessage message={'User is not authorized!'}/>
+                    <Redirect to="/login"/>
+                }
+
+                {
+                    blogWhichShouldBeUpdated &&
+                    <Redirect to="/update-blog"/>
                 }
 
                 {
                     isAuthorized && (
                         <div>
-                            <Link to="/blog">
+                            <Link to="/new-blog">
                                 New blog
                             </Link>
                             
-                            <Link to="#" onClick={(event) => {
-                                event.preventDefault();
-                                this.onRefresh();
-                            }}>
-                                Refresh
-                            </Link>
-
-                            <BlogList blogs={blogs} onDelete={this.onDelete}/>
+                            <BlogList blogs={blogs} onDelete={this.onDelete} onUpdate={this.onUpdate}/>
                         </div> 
                     )
                     
@@ -62,13 +57,20 @@ class AllBlogs extends React.Component {
 
     onDelete(id) {
         const {authToken, dispatch} = this.props;
-        dispatch(clearSuccessfulEditOperationFlag());
         dispatch(deleteOne(authToken, id));
+    }
+
+    onUpdate(id) {
+        const {blogs, dispatch} = this.props;
+        const indexOfBlogWhichShouldBeUpdated = blogs
+            .map(blog => blog._id)
+            .indexOf(id);
+        
+        dispatch(shouldUpdateBlog(blogs[indexOfBlogWhichShouldBeUpdated]));
     }
 
     onRefresh() {
         const {authToken, dispatch} = this.props;
-        dispatch(clearSuccessfulEditOperationFlag());
         dispatch(getAll(authToken));
     }
 }
@@ -76,7 +78,8 @@ class AllBlogs extends React.Component {
 const mapStateToProps = (state) => ({
     isAuthorized: state.user.isAuthorized,
     blogs: state.blogs.blogs,
-    authToken: state.user.authToken
+    authToken: state.user.authToken,
+    blogWhichShouldBeUpdated: state.blogs.blogWhichShouldBeUpdated
 });
 
 export default connect(mapStateToProps)(AllBlogs);

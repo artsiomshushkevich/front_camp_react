@@ -1,10 +1,11 @@
 import React from 'react';
 import {Provider, connect} from 'react-redux'
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link, Switch} from 'react-router-dom';
 import Auth from './auth';
 import {logIn, register} from '../actions/user';
 import AllBlogs from './all-blogs';
-import Blog from './blog';
+import NewBlog from './new-blog';
+import UpdateBlog from './update-blog';
 
 import mainStyles from '../../styles/main.css';
 
@@ -15,7 +16,7 @@ class Root extends React.Component {
 
     render() {
         const {store} = this.props;
-        const {isAuthorized} = store;
+     
 
         return ( 
             <Provider store={store}>
@@ -29,10 +30,13 @@ class Root extends React.Component {
 
                         <hr/>
 
-                        <Route exact path="/" component={AllBlogs}/>
-                        <Route path="/login" component={Auth}/>
-                        <Route path="/blog" component={Blog}/>
-
+                        <Switch>
+                            <Route exact path="/" component={AllBlogs}/>
+                            <Route path="/login" component={Auth}/>
+                            <Route path="/new-blog" component={NewBlog}/>
+                            <Route path="/update-blog" component={UpdateBlog}/>
+                        </Switch>
+                        
                     </div>
                 </Router>
             </Provider>
@@ -41,7 +45,7 @@ class Root extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    isAuthorized: state.isAuthorized
+    isAuthorized: state.user.isAuthorized
 });
 
 export default connect(mapStateToProps)(Root);

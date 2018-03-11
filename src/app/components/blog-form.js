@@ -7,11 +7,15 @@ export default class BlogForm extends React.Component {
     }
 
     render() {
-        const {onSubmit} = this.props;
+        const {onSubmit, title, article} = this.props;
 
         return (
             <LocalForm
                 onSubmit={(values) => onSubmit(values)}
+                initialState={{
+                    title: title || '',
+                    article: article || ''
+                }}
             >
                 <label htmlFor="title">Title:</label>
                 <Control.text id="title" model=".title"/>

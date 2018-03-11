@@ -6,7 +6,9 @@ export const ADD_ONE = 'ADD_ONE';
 export const BLOGS_RECEIVED = 'BLOGS_RECEIVED';
 export const BLOG_ADDED = 'BLOG_ADDED';
 export const BLOG_DELETED = 'BLOG_DELETED';
-export const CLEAR_SUCCESSFUL_EDIT_OPERATION_FLAG = 'CLEAR_SUCCESSFUL_EDIT_OPERATION_FLAG';
+export const SHOULD_UPDATE_BLOG = 'SHOULD_UPDATE_BLOG';
+export const SHOULD_REDIRECT_AFTER_COMPLITION = 'SHOULD_REDIRECT_AFTER_COMPLITION';
+export const RESET_SHOULD_REDIRECT_AFTER_COMPLITION = 'RESET_SHOULD_REDIRECT_AFTER_COMPLITION';
 
 const _blogsRequestBaseURL = 'http://localhost:3000/blogs';
 
@@ -25,8 +27,18 @@ export const blogDeleted = (deletedBlog) => ({
     deletedBlog
 });
 
-export const clearSuccessfulEditOperationFlag = () => ({
-    type: CLEAR_SUCCESSFUL_EDIT_OPERATION_FLAG
+
+export const shouldUpdateBlog = (blogWhichShouldBeUpdated) => ({
+    type: SHOULD_UPDATE_BLOG,
+    blogWhichShouldBeUpdated
+});
+
+export const shouldRedirectAfterComplition = () => ({
+    type: SHOULD_REDIRECT_AFTER_COMPLITION
+});
+
+export const resetShouldRedirectAfterComplition = () => ({
+    type: RESET_SHOULD_REDIRECT_AFTER_COMPLITION
 });
 
 const _createBlogsReqeustConfig = (method, authToken,  payload) => {
@@ -59,10 +71,7 @@ export const deleteOne = (authToken, blogId) => {
     return (dispatch) => {
         const config = _createBlogsReqeustConfig('DELETE', authToken, null);
         return fetch(`${_blogsRequestBaseURL}/${blogId}`, config)
-            .then(response => {
-                console.log(response);
-                return response.json();
-            })
+            .then(response => response.json())
             .then(json => dispatch(blogDeleted(json)));
     };
 };
@@ -74,7 +83,10 @@ export const updateOne = (authToken, blogId, title, article) => {
 
         return fetch(`${_blogsRequestBaseURL}/${blogId}`, config)
             .then(response => response.json())
-            .then(json => dispatch(getAll()));
+            .then(json => {
+                dispatch(getAll(authToken));
+                dispatch(shouldRedirectAfterComplition());
+            });
     };
 };
 

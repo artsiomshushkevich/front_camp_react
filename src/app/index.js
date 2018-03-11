@@ -1,9 +1,9 @@
-import React from 'react'
-import {render} from 'react-dom'
-import {createStore, applyMiddleware} from 'redux'
-import thunk from 'redux-thunk'
-import reducer from './reducers'
-import Root from './containers/root'
+import React from 'react';
+import {render} from 'react-dom';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import reducer from './reducers';
+import Root from './containers/root';
 
 const middleware = [thunk];
 

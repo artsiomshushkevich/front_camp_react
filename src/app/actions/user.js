@@ -1,3 +1,6 @@
+import {getAll} from './blogs';
+
+
 export const REGISTER = 'REGISTER';
 export const LOGIN = 'LOGIN';
 export const JWT_RECEIVED = 'JWT_RECEIVED';
@@ -9,8 +12,6 @@ export const JWTReceived = (jwtObj) => ({
     jwtObj
 });
 
-
-
 const _createAuthRequestConfig = (username, password) => {
     const payload = {
         username: username,
@@ -20,7 +21,7 @@ const _createAuthRequestConfig = (username, password) => {
     return {
         method: 'POST',
         headers: {
-            'Accept': 'application/json, text/plain, */*',
+            'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
@@ -43,7 +44,10 @@ export const logIn = (username, password) => {
 
         return fetch(_userRequestBaseURL + '/login', config)
             .then(response => response.json())
-            .then(jwtObj => dispatch(JWTReceived(jwtObj)));
+            .then((jwtObj) =>{
+                dispatch(JWTReceived(jwtObj));
+                dispatch(getAll(jwtObj.authToken));
+            });
     };
 };
 

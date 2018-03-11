@@ -1,43 +1,77 @@
 import {
     BLOGS_RECEIVED,
     BLOG_ADDED,
-    // BLOG_UPDATED,
+    BLOG_UPDATED,
     BLOG_DELETED,
-    CLEAR_SUCCESSFUL_EDIT_OPERATION_FLAG
+    SHOULD_UPDATE_BLOG,
+    SHOULD_REDIRECT_AFTER_COMPLITION,
+    RESET_SHOULD_REDIRECT_AFTER_COMPLITION
 } from '../actions/blogs';
+
+const _findBlogById = (blogs, id) => {
+    return blogs
+        .map(blog => blog._id)
+        .indexOf(id);
+};
+
+const _addNewBlog = (state, newBlog) => {
+    var blogs = state.blogs.slice(0);
+    blogs.push(newBlog);
+    return blogs;
+};
+
+const _deleteBlog = (state, deletedBlog) => {
+    const indexOfDeletedBlog = _findBlogById(state.blogs, deletedBlog._id);
+
+    var blogs = state.blogs.slice(0);
+    blogs.splice(indexOfDeletedBlog, 1);
+
+    return blogs;
+};
+
+
 
 const blogs = (state = {
     blogs: [],
-    successfulEditOperation: false
+    shouldRedirectAfterComplition: false
 }, action) => {
 
     switch(action.type) {
         case BLOGS_RECEIVED: 
             return {
                 blogs: action.blogs,
-                successfulEditOperation: state.successfulEditOperation
+                shouldRedirectAfterComplition: false,
+                blogWhichShouldBeUpdated: null
             };
         case BLOG_ADDED:
-            state.blogs.push(action.addedBlog);
-
             return {
-                blogs: state.blogs,
-                successfulEditOperation: true
+                blogs: _addNewBlog(state, action.addedBlog),
+                shouldRedirectAfterComplition: true,
+                blogWhichShouldBeUpdated: null
             };
-
         case BLOG_DELETED:
-            const index = state.blogs.map(blog => blog._id).indexOf(action.deletedBlog._id);
-            var m = state.blogs.slice();
-            m.splice(index, 1);
-
             return {
-                blogs: m,
-                successfulEditOperation: true
+                blogs: _deleteBlog(state, action.deletedBlog),
+                shouldRedirectAfterComplition: false,
+                blogWhichShouldBeUpdated: null
             };
-        case CLEAR_SUCCESSFUL_EDIT_OPERATION_FLAG:
+        case SHOULD_REDIRECT_AFTER_COMPLITION:
             return {
                 blogs: state.blogs,
-                successfulEditOperation: false
+                shouldRedirectAfterComplition: true,
+                blogWhichShouldBeUpdated: null
+            };
+        case RESET_SHOULD_REDIRECT_AFTER_COMPLITION:
+            return {
+                blogs: state.blogs,
+                shouldRedirectAfterComplition: false,
+                blogWhichShouldBeUpdated: null
+            };
+        case SHOULD_UPDATE_BLOG:
+            return {
+                blogs: state.blogs,
+                shouldRedirectAfterComplition: false,
+                blogWhichShouldBeUpdated: action.blogWhichShouldBeUpdated
             };
         default:
             return state;

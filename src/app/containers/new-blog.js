@@ -4,7 +4,7 @@ import BlogForm from '../components/blog-form';
 import {addOne} from '../actions/blogs';
 import {Redirect} from 'react-router-dom';
 
-class Blog extends React.Component {
+class NewBlog extends React.Component {
     constructor(props) {
         super(props);
 
@@ -12,13 +12,12 @@ class Blog extends React.Component {
     }
 
     render() {
-        const {successfulEditOperation } = this.props;
+        const {shouldRedirectAfterComplition} = this.props;
 
         return (
-            
             <div>
                 {
-                    successfulEditOperation &&
+                    shouldRedirectAfterComplition &&
                     <Redirect to="/"/>
                 }
 
@@ -38,11 +37,11 @@ class Blog extends React.Component {
 const mapStateToProps = (state) => {
     return {
         authToken: state.user.authToken,
-        successfulEditOperation: state.blogs.successfulEditOperation
+        shouldRedirectAfterComplition: state.blogs.shouldRedirectAfterComplition
     };
 };
 
-export default connect(mapStateToProps)(Blog);
+export default connect(mapStateToProps)(NewBlog);
 
 
 

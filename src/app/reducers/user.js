@@ -8,8 +8,6 @@ const user = (state = {
 
     switch(action.type) {
         case JWT_RECEIVED: 
-            console.dir(action.jwtObj);
-
             return {
                 username: action.jwtObj.username,
                 authToken: action.jwtObj.authToken,
