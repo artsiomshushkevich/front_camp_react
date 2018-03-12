@@ -31,7 +31,7 @@ class AllBlogs extends React.Component {
             <div className="blogs-container">
                 {
                     !isAuthorized &&
-                    <Redirect to="/login"/>
+                    <Redirect to="/auth"/>
                 }
 
                 {

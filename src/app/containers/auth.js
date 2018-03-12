@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import AuthForm from '../components/auth-form';
-import {logIn} from '../actions/user';
+import {auth} from '../actions/user';
 
 class Auth extends React.Component {
     constructor(props) {
@@ -28,7 +28,7 @@ class Auth extends React.Component {
 
     onSubmit(values) {
         const {username, password} = values;
-        this.props.dispatch(logIn(username, password));
+        this.props.dispatch(auth(username, password));
     }
 }
 

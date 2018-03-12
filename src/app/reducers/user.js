@@ -1,4 +1,4 @@
-import {JWT_RECEIVED} from '../actions/user';
+import {JWT_RECEIVED, LOGOUT} from '../actions/user';
 
 const user = (state = {
     username: '',
@@ -13,6 +13,12 @@ const user = (state = {
                 authToken: action.jwtObj.authToken,
                 isAuthorized: true
             };
+        case LOGOUT: 
+            return {
+                username: '',
+                authToken: '',
+                isAuthorized: false 
+            }
         default:
             return state;
     }

@@ -29,8 +29,6 @@ const _deleteBlog = (state, deletedBlog) => {
     return blogs;
 };
 
-
-
 const blogs = (state = {
     blogs: [],
     shouldRedirectAfterComplition: false

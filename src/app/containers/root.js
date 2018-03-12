@@ -2,7 +2,7 @@ import React from 'react';
 import {Provider, connect} from 'react-redux'
 import {BrowserRouter as Router, Route, Link, Switch} from 'react-router-dom';
 import Auth from './auth';
-import {logIn, register} from '../actions/user';
+import {logOut} from '../actions/user';
 import AllBlogs from './all-blogs';
 import NewBlog from './new-blog';
 import UpdateBlog from './update-blog';
@@ -15,7 +15,7 @@ class Root extends React.Component {
     }
 
     render() {
-        const {store} = this.props;
+        const {store, isAuthorized, username} = this.props;
      
 
         return ( 
@@ -23,16 +23,34 @@ class Root extends React.Component {
                 <Router>
                     <div>
                         <ul>
-                            <li>
-                                <Link to="/login">Login</Link>
-                            </li>
+                            {
+                                !isAuthorized &&
+                                (
+                                    <li>
+                                        <Link to="/auth">Auth</Link>
+                                    </li>
+                                )
+                            }
+                            {
+                                isAuthorized &&
+                                (
+                                    <li>
+                                        <Link to="#" onClick={(event) => {
+                                            event.preventDefault();
+                                            this.onLogOut();
+                                        }}>Log Out</Link>
+                                        <span>({username})</span>
+                                    </li>
+                                )
+                            }
+                            
                         </ul>
 
                         <hr/>
 
                         <Switch>
                             <Route exact path="/" component={AllBlogs}/>
-                            <Route path="/login" component={Auth}/>
+                            <Route path="/auth" component={Auth}/>
                             <Route path="/new-blog" component={NewBlog}/>
                             <Route path="/update-blog" component={UpdateBlog}/>
                         </Switch>
@@ -42,10 +60,15 @@ class Root extends React.Component {
             </Provider>
         );
     }
+
+    onLogOut() {
+        this.props.dispatch(logOut());
+    }
 }
 
 const mapStateToProps = (state) => ({
-    isAuthorized: state.user.isAuthorized
+    isAuthorized: state.user.isAuthorized,
+    username: state.user.username
 });
 
 export default connect(mapStateToProps)(Root);

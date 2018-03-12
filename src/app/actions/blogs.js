@@ -52,10 +52,10 @@ const _createBlogsReqeustConfig = (method, authToken,  payload) => {
     };
 
     if (payload) {
-        config.body = JSON.stringify(payload)
+        config.body = JSON.stringify(payload);
     }
 
-    return config
+    return config;
 };
 
 export const getAll = (authToken) => {

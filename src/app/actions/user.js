@@ -1,9 +1,8 @@
 import {getAll} from './blogs';
 
-
-export const REGISTER = 'REGISTER';
-export const LOGIN = 'LOGIN';
+export const AUTH = 'AUTH';
 export const JWT_RECEIVED = 'JWT_RECEIVED';
+export const LOGOUT = 'LOGOUT';
 
 const _userRequestBaseURL = 'http://localhost:3000/users';
 
@@ -28,21 +27,11 @@ const _createAuthRequestConfig = (username, password) => {
     };
 }
 
-export const register = (username, password) => {
+export const auth = (username, password) => {
     return (dispatch) => {
         const config = _createAuthRequestConfig(username, password);
 
-        return fetch(_userRequestBaseURL, config)
-            .then(response => response.json())
-            .then(jwtObj => dispatch(JWTReceived(jwtObj)));
-    };
-};
-
-export const logIn = (username, password) => {
-    return (dispatch) => {
-        const config = _createAuthRequestConfig(username, password);
-
-        return fetch(_userRequestBaseURL + '/login', config)
+        return fetch(_userRequestBaseURL + '/auth', config)
             .then(response => response.json())
             .then((jwtObj) =>{
                 dispatch(JWTReceived(jwtObj));
@@ -51,4 +40,7 @@ export const logIn = (username, password) => {
     };
 };
 
+export const logOut = () => ({
+    type: LOGOUT
+});
 
